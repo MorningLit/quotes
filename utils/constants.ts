@@ -1,4 +1,7 @@
-const quotes: string[] = ["Your mom", "Dab yeet"];
-const typeSpeed: number = 500;
+const typeSpeed: number = 100;
+interface quoteProp {
+  author: string;
+  content: string;
+}
 
-export { quotes, typeSpeed };
+export { typeSpeed, quoteProp };
