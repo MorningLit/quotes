@@ -1,4 +1,4 @@
-const TYPE_SPEED: number = 50;
+const TYPE_SPEED: number = 500;
 const NEXT_QUOTE_DELAY: number = 2500;
 interface quoteProp {
   author: string;

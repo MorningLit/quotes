@@ -14,6 +14,7 @@ const Type = () => {
   const [end, setEnd] = useState(false);
   const [autoplay, setAutoplay] = useState(true);
   const [list, setList] = useState<quoteProp[]>([]);
+  const [blink, setBlink] = useState(false);
 
   const isInitial = () => idx === 0 && list.length === 0;
   const endReached = () => subIdx === list[idx].content.length && !end;
@@ -69,12 +70,17 @@ const Type = () => {
     return () => clearTimeout(timeout);
   }, [end]);
 
+  useEffect(() => {
+    const timeout = setTimeout(() => setBlink((prevBlink) => !prevBlink), 500);
+    return () => clearTimeout(timeout);
+  }, [blink]);
   return (
     <>
       {list.length > 0 ? (
         <>
-          <p className="text-5xl" id="type">
+          <p className="text-5xl h-5/6">
             {list[idx].content.substring(0, subIdx)}
+            {blink ? "|" : ""}
           </p>
           <p className="text-2xl text-right">-{list[idx].author}</p>
         </>
