@@ -1,15 +1,23 @@
-import { useEffect, useState } from "react";
-import { API_LINK, quoteProp, TYPE_SPEED } from "../utils/constants";
+import { useEffect, useState, useRef } from "react";
+import {
+  API_LINK,
+  NEXT_QUOTE_DELAY,
+  quoteProp,
+  TYPE_SPEED,
+} from "../utils/constants";
 
 const Type = () => {
+  const isMounted = useRef(false);
+
   const [idx, setIdx] = useState(0);
   const [subIdx, setSubIdx] = useState(0);
-  const [reverse, setReverse] = useState(false);
+  const [end, setEnd] = useState(false);
   const [autoplay, setAutoplay] = useState(true);
   const [list, setList] = useState<quoteProp[]>([]);
-  const type = () => {
-    setSubIdx((prevSubIdx) => prevSubIdx + (reverse ? -1 : 1));
-  };
+
+  const isInitial = () => idx === 0 && list.length === 0;
+  const endReached = () => subIdx === list[idx].content.length && !end;
+
   const fetchQuote = () => {
     fetch(API_LINK)
       .then((res) => res.json())
@@ -17,26 +25,35 @@ const Type = () => {
         setList((prevList) => [...prevList, data]);
       });
   };
-  const isInitial = () => idx === 0 && list.length === 0;
-  const autoType = () => {
-    //if (idx === list.length - 1 && subIdx === list[idx].length) return true; // reached end of autoplay
-    if (subIdx === list[idx].content.length && !reverse) {
-      setReverse(true);
-      fetchQuote();
-    }
-    if (subIdx === 0 && reverse) {
-      setReverse(false);
-      setIdx((prevIdx) => prevIdx + 1);
-    }
+
+  const type = () => {
+    setSubIdx((prevSubIdx) => prevSubIdx + 1);
   };
+  const nextQuote = () => {
+    setEnd(false);
+    setIdx((prevIdx) => prevIdx + 1);
+    setSubIdx(0);
+  };
+
   useEffect(() => {
-    if (isInitial()) {
-      fetchQuote();
+    fetchQuote();
+  }, []);
+
+  useEffect(() => {
+    if (isInitial()) return;
+    /* uncomment when ready for prod, comment above too
+    if (!isMounted.current) {
+      isMounted.current = true;
       return;
     }
+    */
     var timeout: NodeJS.Timeout;
     if (autoplay) {
-      autoType();
+      if (endReached()) {
+        setEnd(true);
+        fetchQuote();
+      }
+      if (end) return;
       timeout = setTimeout(type, TYPE_SPEED);
     } else {
     }
@@ -44,7 +61,13 @@ const Type = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [subIdx, idx, list, reverse]);
+  }, [idx, subIdx, list]);
+
+  useEffect(() => {
+    if (!end) return;
+    const timeout = setTimeout(nextQuote, NEXT_QUOTE_DELAY);
+    return () => clearTimeout(timeout);
+  }, [end]);
 
   return (
     <>
