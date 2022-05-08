@@ -82,7 +82,9 @@ const Type = () => {
             {list[idx].content.substring(0, subIdx)}
             {blink ? "|" : ""}
           </p>
-          <p className="text-2xl text-right">-{list[idx].author}</p>
+          <p className={`author text-2xl text-right ${end ? "appear" : ""}`}>
+            -{list[idx].author}
+          </p>
         </>
       ) : (
         <></>

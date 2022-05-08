@@ -17,3 +17,16 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.author {
+  opacity: 0;
+}
+.author.appear {
+  animation: appear 1s ease-in forwards;
+}
+
+@keyframes appear {
+  100% {
+    opacity: 1;
+  }
+}
