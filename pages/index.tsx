@@ -6,8 +6,8 @@ const Home: NextPage = () => {
   return (
     <div className="h-screen w-screen">
       <Navbar />
-      <div className="h-3/6 w-full flex justify-center items-center ">
-        <div className="w-3/4">
+      <div className="h-5/6 w-full flex justify-center items-center ">
+        <div className="w-3/4 flex flex-col justify-around h-full">
           <Type />
         </div>
       </div>

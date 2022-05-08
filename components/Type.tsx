@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { typeSpeed, quoteProp } from "../utils/constants";
+import { API_LINK, quoteProp, TYPE_SPEED } from "../utils/constants";
 
 const Type = () => {
   const [idx, setIdx] = useState(0);
@@ -10,48 +10,55 @@ const Type = () => {
   const type = () => {
     setSubIdx((prevSubIdx) => prevSubIdx + (reverse ? -1 : 1));
   };
+  const fetchQuote = () => {
+    fetch(API_LINK)
+      .then((res) => res.json())
+      .then((data) => {
+        setList((prevList) => [...prevList, data]);
+      });
+  };
+  const isInitial = () => idx === 0 && list.length === 0;
   const autoType = () => {
     //if (idx === list.length - 1 && subIdx === list[idx].length) return true; // reached end of autoplay
     if (subIdx === list[idx].content.length && !reverse) {
       setReverse(true);
-      fetch("https://api.quotable.io/random")
-        .then((res) => res.json())
-        .then((data) => {
-          setList((prevList) => [...prevList, data]);
-        });
+      fetchQuote();
     }
     if (subIdx === 0 && reverse) {
       setReverse(false);
       setIdx((prevIdx) => prevIdx + 1);
     }
-    return false;
   };
   useEffect(() => {
-    if (idx === 0 && list.length === 0) {
-      fetch("https://api.quotable.io/random")
-        .then((res) => res.json())
-        .then((data) => {
-          setList((prevList) => [...prevList, data]);
-        });
+    if (isInitial()) {
+      fetchQuote();
       return;
     }
-    var end;
-    if (autoplay) {
-      end = autoType();
-    }
-    if (end) return;
     var timeout: NodeJS.Timeout;
-    timeout = setTimeout(type, typeSpeed);
+    if (autoplay) {
+      autoType();
+      timeout = setTimeout(type, TYPE_SPEED);
+    } else {
+    }
 
     return () => {
       clearTimeout(timeout);
     };
-  }, [subIdx, idx, list]);
+  }, [subIdx, idx, list, reverse]);
 
   return (
-    <p className="text-5xl" id="type">
-      {list.length > 0 ? list[idx].content.substring(0, subIdx) : ""}
-    </p>
+    <>
+      {list.length > 0 ? (
+        <>
+          <p className="text-5xl" id="type">
+            {list[idx].content.substring(0, subIdx)}
+          </p>
+          <p className="text-2xl text-right">-{list[idx].author}</p>
+        </>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 
