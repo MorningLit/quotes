@@ -42,13 +42,13 @@ const Type = () => {
   }, []);
 
   useEffect(() => {
-    if (isInitial() || end) return;
-    /* uncomment when ready for prod, comment above too
+    //if (isInitial() || end) return;
+    // uncomment when ready for prod, comment above too
     if (!isMounted.current) {
       isMounted.current = true;
       return;
     }
-    */
+    if (end) return;
     if (endReached()) {
       setEnd(true);
       fetchQuote();
