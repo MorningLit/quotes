@@ -8,11 +8,7 @@ const Home: NextPage = () => {
     <div className="h-screen w-screen">
       <AutoPlayContext>
         <Navbar />
-        <div className="h-5/6 w-full flex justify-center items-center ">
-          <div className="w-3/4 h-full mt-8">
-            <Type />
-          </div>
-        </div>
+        <Type />
       </AutoPlayContext>
     </div>
   );

@@ -30,3 +30,6 @@ a {
     opacity: 1;
   }
 }
+.hover {
+  cursor: pointer;
+}
