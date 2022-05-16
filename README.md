@@ -7,7 +7,7 @@
 - Have different CSS animations
 - Add title attribute when can click next quote
 
-Quotes obtained from [`here`](https://api.quotable.io/random)
+Quotes obtained thanks to [`this api`](https://api.quotable.io)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
